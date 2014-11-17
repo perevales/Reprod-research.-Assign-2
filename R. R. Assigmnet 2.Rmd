@@ -1,0 +1,67 @@
+---
+title: "Reprod. Research. Peer assignm. 2"
+author: "Pedro Carmona"
+date: "Monday, November 17, 2014"
+output: html_document
+---
+
+
+```{r}
+temp <- tempfile()
+download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+              ,temp)
+data <- read.table(file=bzfile(temp, "repdata-data-StormData.csv")
+                    , header = T
+                    , sep = ","
+                    , na.strings = c("NA", ""))
+unlink(temp)
+```
+
+```{r}
+str(data)
+```
+
+```{r}
+number.na <- sapply(data, function(x) sum(is.na(x)))
+```
+
+```{r}
+which(number.na >= 0.3*nrow(data))
+```
+
+```{r}
+new.data <- data[,-c(10,11,15,17,18,21,26,28,31,36)]
+```
+
+```{r}
+new.data <- na.omit(new.data)
+```
+
+fata <- table(new.data$EVTYPE,new.data$FATALITIES)
+injur <- table(new.data$EVTYPE, new.data$INJURIES)
+
+table(new.data$FATALITIES)
+
+table(new.data$EVTYPE, new.data$STATE)
+
+head(fata)
+head(injur)
+
+max.values <- apply(fata,1,which.max)
+which.max(max.values)
+
+
+max.values2 <- apply(fata[-72,],1,which.max)
+which.max(max.values2)
+
+
+
+
+  
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
